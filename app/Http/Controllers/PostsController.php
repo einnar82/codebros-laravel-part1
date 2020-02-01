@@ -24,7 +24,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('components.addform');
     }
 
     /**
@@ -35,7 +35,8 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        return Post::create($request->all());
+        Post::create($request->all());
+        return redirect()->route('posts.create');
     }
 
     /**
