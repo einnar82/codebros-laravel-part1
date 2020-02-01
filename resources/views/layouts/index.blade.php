@@ -8,5 +8,8 @@
 </head>
 <body>
 @yield('add_form')
+@yield('table')
+@yield('details')
+@yield('update_form')
 </body>
 </html>

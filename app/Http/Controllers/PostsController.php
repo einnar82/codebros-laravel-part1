@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Post;
 
@@ -14,7 +15,10 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        $posts = Post::all();
+        return view('posts.index', [
+            'posts' => $posts
+        ]);
     }
 
     /**
@@ -24,7 +28,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('components.addform');
+        return view('posts.create');
     }
 
     /**
@@ -33,10 +37,10 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         Post::create($request->all());
-        return redirect()->route('posts.create');
+        return $this->index();
     }
 
     /**
@@ -47,7 +51,8 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        return Post::findOrFail($id);
+        $post = Post::findOrFail($id);
+        return view('posts.show', ['post' => $post]);
     }
 
     /**
@@ -58,7 +63,10 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        return view('posts.update', [
+            'post' => $post
+        ]);
     }
 
     /**
@@ -68,9 +76,10 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        return Post::findOrFail($id)->update($request->all());
+        Post::findOrFail($id)->update($request->all());
+        return $this->index();
     }
 
     /**
@@ -81,8 +90,7 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        if (Post::findOrFail($id)->delete()) {
-            return response()->json([], 204);
-        }
+        Post::findOrFail($id)->delete();
+        return $this->index();
     }
 }
