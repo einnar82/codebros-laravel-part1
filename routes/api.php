@@ -16,3 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('/posts', 'API\PostsController');
+Route::apiResource('/comments', 'API\CommentsController');
+Route::post('/tag/{id}', 'API\CommentsController@tag');
